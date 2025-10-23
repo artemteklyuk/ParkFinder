@@ -1,15 +1,16 @@
-# Используем официальный образ Node.js
-FROM node:18-slim
-
-# Установка рабочей директории
+FROM node:18 AS builder
 WORKDIR /app
 
-# Копирование package.json и установка зависимостей
-# Предполагается, что в каждой директории есть package.json
 COPY package.json package-lock.json ./
+
 RUN npm install
 
-# Копирование исходного кода
 COPY . .
 
-# Команда запуска будет определена в docker-compose.yml
+FROM node:18-slim
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app .
+
+CMD ["npm", "start"]
