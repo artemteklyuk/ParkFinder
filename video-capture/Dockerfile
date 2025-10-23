@@ -22,4 +22,6 @@ RUN apt-get update && \
 # Копирование остального кода
 COPY . .
 
+CMD ["python", "main.py"]
+
 # Команда запуска будет определена в docker-compose.yml
